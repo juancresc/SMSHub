@@ -2,8 +2,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.ar.smshub.MainActivity">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
+
+    <item
+            android:id="@+id/action_settings"
+            android:orderInCategory="300"
+            android:title="Settings"
+            android:icon="@drawable/ic_baseline_settings_20px"
+            app:showAsAction="always"></item>
 </menu>
