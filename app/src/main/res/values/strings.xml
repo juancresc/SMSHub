@@ -7,9 +7,15 @@
 
     <integer name="preference_default_interval">3</integer>
     <bool name="preference_default_send_enabled">false</bool>
+    <string name="preference_default_send_url">http://www.yoururl.com/api/send</string>
+    <string name="preference_default_receive_url">http://www.yoururl.com/api/receive</string>
+    <string name="preference_default_status_url">http://www.yoururl.com/api/status</string>
+    <string name="preference_default_device_id">1</string>
 
     <string name="preference_file_key">com.ar.smshub.prefs</string>
-    <string name="preference_url">com.ar.smshub.prefs.url</string>
+    <string name="preference_send_url">com.ar.smshub.prefs.send_url</string>
+    <string name="preference_status_url">com.ar.smshub.prefs.status_url</string>
+    <string name="preference_receive_url">com.ar.smshub.prefs.receive_url</string>
     <string name="preference_interval">com.ar.smshub.prefs.interval</string>
     <string name="preference_send_enabled">com.ar.smshub.prefs.send_enabled</string>
     <string name="preference_device_id">com.ar.smshub.prefs.device_id</string>

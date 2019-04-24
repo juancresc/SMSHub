@@ -34,6 +34,7 @@ class SettingsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    var settingsManager = SettingsManager(this.activity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,47 +49,34 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val context: Context = this.activity // or if block
-
-        val sharedPref = context.getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE
-        )
-
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val btnSave: Button = view.findViewById(R.id.btnSave)
-        val txtURL: EditText = view.findViewById(R.id.textURL)
+        val txtSendURL: EditText = view.findViewById(R.id.textSendURL)
+        val txtStatusURL: EditText = view.findViewById(R.id.textStatusURL)
+        val txtReceiveURL: EditText = view.findViewById(R.id.textReceiveURL)
         val txtInterval: EditText = view.findViewById(R.id.textInterval)
         val txtDeviceId: EditText = view.findViewById(R.id.textDeviceId)
         val switchIsEnabled: Switch = view.findViewById(R.id.switchIsEnabled)
 
-        //read
-        val defaultSendEnabled = resources.getBoolean(R.bool.preference_default_send_enabled)
-        val defaultInterval = resources.getInteger(R.integer.preference_default_interval)
-        val defaultURL = ""
-        val defaultDeviceId = ""
-
-        val isSendEnabled = sharedPref!!.getBoolean(getString(R.string.preference_send_enabled), defaultSendEnabled)
-        val interval = sharedPref!!.getInt(getString(R.string.preference_interval), defaultInterval)
-        val URL = sharedPref!!.getString(getString(R.string.preference_url), defaultURL)
-        val deviceId = sharedPref!!.getString(getString(R.string.preference_device_id), defaultDeviceId)
-
-        txtInterval.setText(interval.toString())
-        switchIsEnabled.isChecked = isSendEnabled
-        txtURL.setText(URL)
-        txtDeviceId.setText(deviceId)
+        txtInterval.setText(settingsManager.interval.toString())
+        switchIsEnabled.isChecked = settingsManager.isSendEnabled
+        txtSendURL.setText(settingsManager.sendURL)
+        txtReceiveURL.setText(settingsManager.receiveURL)
+        txtStatusURL.setText(settingsManager.statusURL)
+        txtDeviceId.setText(settingsManager.deviceId)
 
         //save
         btnSave.setOnClickListener {
-            with(sharedPref!!.edit()) {
-                putString(getString(R.string.preference_url), txtURL.text.toString())
-                putString(getString(R.string.preference_device_id), txtDeviceId.text.toString())
-                putInt(getString(R.string.preference_interval), txtInterval.text.toString().toInt())
-                putBoolean(getString(R.string.preference_send_enabled), switchIsEnabled.isChecked)
-                commit()
-            }
-            Toast.makeText(activity, "Settings updated", Toast.LENGTH_SHORT).show()
+            settingsManager.setSettings(
+                switchIsEnabled.isChecked,
+                txtInterval.text.toString().toInt(),
+                txtSendURL.text.toString(),
+                txtReceiveURL.text.toString(),
+                txtStatusURL.text.toString(),
+                txtDeviceId.text.toString()
+            )
             val fragment = MainFragment()
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.main_view, fragment)
@@ -97,28 +85,32 @@ class SettingsFragment : Fragment() {
 
         //save
         switchIsEnabled.setOnClickListener {
-            if (URL == "") {
-                Toast.makeText(activity, "Please specify a URL first", Toast.LENGTH_SHORT).show()
-            } else {
-                if (switchIsEnabled.isChecked) {
-                    Timer("SendSMS", true).scheduleAtFixedRate(SendTask(URL), 0, 1500)
+            var ok = true
+            //if enabling first validate everything
+            if (switchIsEnabled.isChecked) {
+                if (txtInterval.text.toString() == "" ||
+                    txtSendURL.text.toString() == "" ||
+                    txtDeviceId.text.toString() == "" ||
+                    txtStatusURL.text.toString() == "" ||
+                    txtReceiveURL.text.toString() == "" ) {
+                    Toast.makeText(activity, "Please complete all fields", Toast.LENGTH_LONG).show()
+                    ok = false
                 }
+
             }
 
-
+            if (ok) {
+                settingsManager.setSettings(
+                    switchIsEnabled.isChecked,
+                    txtInterval.text.toString().toInt(),
+                    txtSendURL.text.toString(),
+                    txtReceiveURL.text.toString(),
+                    txtStatusURL.text.toString(),
+                    txtDeviceId.text.toString()
+                )
+            }
         }
-
-
-        // Return the fragment view/layout
-
-
         return view
-
-    }
-
-
-    fun msgShow(msg: String) {
-        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
     }
 
     // TODO: Rename method, update argument and hook method into UI event
