@@ -85,11 +85,7 @@ class SettingsFragment : Fragment() {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.main_view, fragment)
             transaction.commit()
-            if (switchIsEnabled.isChecked) {
-                startTimer()
-            }else{
-                cancelTimer()
-            }
+            mainActivity.updateTimer()
         }
 
         //save
@@ -120,26 +116,9 @@ class SettingsFragment : Fragment() {
                     txtDeviceId.text.toString()
                 )
             }
-            if (switchIsEnabled.isChecked) {
-                startTimer()
-            }else{
-                cancelTimer()
-            }
+            mainActivity.updateTimer()
         }
         return view
-    }
-    fun cancelTimer(){
-        mainActivity.timerSend.cancel()
-        mainActivity.timerSend = Timer("SendSMS", true)
-    }
-
-    fun startTimer(){
-        val interval = (settingsManager.interval.toInt() * 60 * 1000).toLong()
-        Log.d("INTERVAL", interval.toString())
-        mainActivity.timerSend.cancel()
-        mainActivity.timerSend = Timer("SendSMS", true)
-        mainActivity.timerSend.schedule(SendTask(settingsManager, this.activity), interval, interval)
-        mainActivity.mainFragment.logMain("Hello")
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -16,67 +16,121 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
+    var SMS_PERMISSION_READ_CODE = 2
+
     protected lateinit var settingsManager: SettingsManager
     lateinit var mainFragment: MainFragment
     lateinit var timerSend: Timer;
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
         settingsManager = SettingsManager(this)
-
         mainFragment = MainFragment()
         mainFragment.arguments = intent.extras
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.main_view, mainFragment)
         transaction.commit()
+        fragmentManager.executePendingTransactions()
         //initialize timer for the first time
-        if(::timerSend.isInitialized){
+        updateTimer()
+        requestSMSSendPermission()
+        requestSMSReadPermission()
+    }
+
+    fun updateTimer() {
+        if (settingsManager.isSendEnabled) {
+            startTimer()
+        } else {
+            cancelTimer()
+        }
+    }
+
+    fun cancelTimer() {
+        if (::timerSend.isInitialized) {
             timerSend.cancel()
         }
         timerSend = Timer("SendSMS", true)
-        //if enabled start timer
-        if (settingsManager.isSendEnabled){
-            val interval = (settingsManager.interval.toInt() * 60 * 1000).toLong()
-            timerSend.schedule(SendTask(settingsManager, this), interval, interval)
+    }
+
+    fun startTimer() {
+        if (::timerSend.isInitialized) {
+            timerSend.cancel()
         }
 
+        timerSend = Timer("SendSMS", true)
+        if (settingsManager.isSendEnabled) {
+            val minutes = settingsManager.interval.toInt() * 60
+            val interval = (minutes * 1000).toLong()
+            //this does not work
+            //mainFragment.logMain("Timer started at " + minutes.toString())
+            timerSend.schedule(SendTask(settingsManager, this), interval, interval)
+        }
+    }
+
+    fun requestSMSSendPermission() {
+
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SEND_SMS)
-            != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.SEND_SMS
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
 
             // Permission is not granted
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.SEND_SMS)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.SEND_SMS
+                )
+            ) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(
+                    this,
                     arrayOf(Manifest.permission.SEND_SMS),
-                    MY_PERMISSIONS_REQUEST_SEND_SMS)
+                    MY_PERMISSIONS_REQUEST_SEND_SMS
+                )
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         } else {
             // Permission has already been granted
         }
+    }
 
+    /**
+     * check SMS read permission
+     */
+    fun isSmsPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_SMS
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * Request runtime SMS permission
+     */
+    private fun requestSMSReadPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_SMS)) {
+            // You may display a non-blocking explanation here, read more in the documentation:
+            // https://developer.android.com/training/permissions/requesting.html
+        }
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), SMS_PERMISSION_READ_CODE)
     }
 
 
-
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_SEND_SMS -> {
                 // If request is cancelled, the result arrays are empty.

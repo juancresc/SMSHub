@@ -1,9 +1,9 @@
 package com.ar.smshub
 
+import android.app.Fragment
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.app.Fragment;
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +31,7 @@ class MainFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    protected lateinit var textMainLog: TextView
+    lateinit var textMainLog: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +49,7 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         textMainLog = view.findViewById(R.id.textMainLog)
-        return inflater.inflate(R.layout.fragment_main, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        logMain("asddsaas")
+        return view
     }
 
 
