@@ -8,8 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Switch
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_settings.*
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -26,7 +29,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class FragmentSettings : Fragment() {
+class SettingsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -44,17 +47,71 @@ class FragmentSettings : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val context: Context = this.activity // or if block
+
+        val sharedPref = context.getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE
+        )
+
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val btnSave: Button = view.findViewById(R.id.btnSave)
+        val txtURL: EditText = view.findViewById(R.id.textURL)
+        val txtInterval: EditText = view.findViewById(R.id.textInterval)
+        val txtDeviceId: EditText = view.findViewById(R.id.textDeviceId)
+        val switchIsEnabled: Switch = view.findViewById(R.id.switchIsEnabled)
+
+        //read
+        val defaultSendEnabled = resources.getBoolean(R.bool.preference_default_send_enabled)
+        val defaultInterval = resources.getInteger(R.integer.preference_default_interval)
+        val defaultURL = ""
+        val defaultDeviceId = ""
+
+        val isSendEnabled = sharedPref!!.getBoolean(getString(R.string.preference_send_enabled), defaultSendEnabled)
+        val interval = sharedPref!!.getInt(getString(R.string.preference_interval), defaultInterval)
+        val URL = sharedPref!!.getString(getString(R.string.preference_url), defaultURL)
+        val deviceId = sharedPref!!.getString(getString(R.string.preference_device_id), defaultDeviceId)
+
+        txtInterval.setText(interval.toString())
+        switchIsEnabled.isChecked = isSendEnabled
+        txtURL.setText(URL)
+        txtDeviceId.setText(deviceId)
+
+        //save
         btnSave.setOnClickListener {
+            with(sharedPref!!.edit()) {
+                putString(getString(R.string.preference_url), txtURL.text.toString())
+                putString(getString(R.string.preference_device_id), txtDeviceId.text.toString())
+                putInt(getString(R.string.preference_interval), txtInterval.text.toString().toInt())
+                putBoolean(getString(R.string.preference_send_enabled), switchIsEnabled.isChecked)
+                commit()
+            }
             Toast.makeText(activity, "Settings updated", Toast.LENGTH_SHORT).show()
-            val firstFragment = MainActivity()
+            val fragment = MainFragment()
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.main_view, firstFragment)
+            transaction.replace(R.id.main_view, fragment)
             transaction.commit()
         }
+
+        //save
+        switchIsEnabled.setOnClickListener {
+            if (URL == "") {
+                Toast.makeText(activity, "Please specify a URL first", Toast.LENGTH_SHORT).show()
+            } else {
+                if (switchIsEnabled.isChecked) {
+                    Timer("SendSMS", true).scheduleAtFixedRate(SendTask(URL), 0, 1500)
+                }
+            }
+
+
+        }
+
+
         // Return the fragment view/layout
+
+
         return view
 
     }
@@ -63,6 +120,7 @@ class FragmentSettings : Fragment() {
     fun msgShow(msg: String) {
         Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
@@ -102,7 +160,7 @@ class FragmentSettings : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            FragmentSettings().apply {
+            SettingsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

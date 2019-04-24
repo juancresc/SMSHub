@@ -12,11 +12,18 @@
         <Switch android:text="Enable SMS sending"
                 android:textSize="20sp"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" android:id="@+id/switch2" android:layout_weight="0.3"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/switchIsEnabled" android:layout_weight="0.3"/>
 
     </LinearLayout>
 
 
+    <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+    />
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -48,9 +55,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
                 android:textSize="15sp"
-                android:text="Variables to get are: 'message' 'number'"/>
+                android:text="You have to pass 'message' and 'number' as a JSON object"/>
 
     </LinearLayout>
 
@@ -69,12 +75,35 @@
 
 
         <EditText
-                android:id="@+id/txtAuthor"
+                android:id="@+id/textInterval"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.75"
                 android:ems="10" android:inputType="number" android:text="3"/>
     </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textSize="15sp"
+                android:text="Device id"/>
+
+
+        <EditText
+                android:id="@+id/textDeviceId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10" android:inputType="text"
+                android:hint="Will be send as 'id' in GET method "/>
+    </LinearLayout>
+
 
 
     <LinearLayout
@@ -83,10 +112,9 @@
             android:orientation="horizontal">
 
 
-
         <Button
-                android:id="@+id/btnSubmit"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="12"
                 android:text="Save and back"/>

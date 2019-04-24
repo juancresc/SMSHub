@@ -4,4 +4,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <integer name="preference_default_interval">3</integer>
+    <bool name="preference_default_send_enabled">false</bool>
+
+    <string name="preference_file_key">com.ar.smshub.prefs</string>
+    <string name="preference_url">com.ar.smshub.prefs.url</string>
+    <string name="preference_interval">com.ar.smshub.prefs.interval</string>
+    <string name="preference_send_enabled">com.ar.smshub.prefs.send_enabled</string>
+    <string name="preference_device_id">com.ar.smshub.prefs.device_id</string>
 </resources>

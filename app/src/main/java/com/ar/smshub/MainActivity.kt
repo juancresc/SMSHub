@@ -14,6 +14,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        val fragment = MainFragment()
+        fragment.arguments = intent.extras
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.main_view, fragment)
+        transaction.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -31,8 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         return when (item.itemId) {
             R.id.action_settings -> {
-                msgShow("Setting")
-                val firstFragment = FragmentSettings()
+                val firstFragment = SettingsFragment()
                 firstFragment.arguments = intent.extras
                 val transaction = fragmentManager.beginTransaction()
                 transaction.replace(R.id.main_view, firstFragment)
