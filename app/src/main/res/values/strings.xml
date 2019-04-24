@@ -7,6 +7,8 @@
 
     <integer name="preference_default_interval">3</integer>
     <bool name="preference_default_send_enabled">false</bool>
+    <string name="preference_default_url">http://www.yoururl.com/api</string>
+    <string name="preference_default_device_id">1</string>
 
     <string name="preference_file_key">com.ar.smshub.prefs</string>
     <string name="preference_url">com.ar.smshub.prefs.url</string>

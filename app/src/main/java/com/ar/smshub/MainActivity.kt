@@ -17,6 +17,9 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
+    var settingsManager = SettingsManager(this)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,23 +31,8 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.main_view, fragment)
         transaction.commit()
 
-
-        //send?
-        val sharedPref = this.getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE
-        )
-        //read
-        val defaultSendEnabled = resources.getBoolean(R.bool.preference_default_send_enabled)
-        val defaultInterval = resources.getInteger(R.integer.preference_default_interval)
-        val defaultURL = ""
-        val defaultDeviceId = ""
-
-        val isSendEnabled = sharedPref!!.getBoolean(getString(R.string.preference_send_enabled), defaultSendEnabled)
-        val interval = sharedPref!!.getInt(getString(R.string.preference_interval), defaultInterval)
-        val URL = sharedPref!!.getString(getString(R.string.preference_url), defaultURL)
-        val deviceId = sharedPref!!.getString(getString(R.string.preference_device_id), defaultDeviceId)
-
-        if (isSendEnabled) {
+        if (settingsManager.isSendEnabled){
+            msgShow("shouldstart!")
            // Timer("SendSMS", true).scheduleAtFixedRate(SendTask(URL), 0, 1500)
         }
 
@@ -56,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_CONTACTS)) {
+                    Manifest.permission.SEND_SMS)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
