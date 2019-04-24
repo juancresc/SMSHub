@@ -11,9 +11,12 @@ import java.net.URL
 class SMSDeliverIntent : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         var statusUrl = intent!!.getStringExtra("statusURL")
-        var deviceId =  intent!!.getStringExtra("deviceId")
-        var messageId =  intent!!.getStringExtra("messageId")
-        var finalStatusUrl = "$statusUrl?deviceId=$deviceId&messageId=$messageId&status=DELIVERED"
-        URL(finalStatusUrl).readText()
+        var deviceId = intent!!.getStringExtra("deviceId")
+        var messageId = intent!!.getStringExtra("messageId")
+
+        khttp.post(
+            url = statusUrl,
+            data = mapOf("deviceId" to deviceId, "messageId" to messageId, "status" to "DELIVERED")
+        )
     }
 }

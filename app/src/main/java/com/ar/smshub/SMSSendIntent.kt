@@ -22,7 +22,10 @@ class SMSSendIntent : BroadcastReceiver() {
         var statusUrl = intent!!.getStringExtra("statusURL")
         var deviceId =  intent!!.getStringExtra("deviceId")
         var messageId =  intent!!.getStringExtra("messageId")
-        var finalStatusUrl = "$statusUrl?deviceId=$deviceId&messageId=$messageId&status=$status"
-        URL(finalStatusUrl).readText()
+
+        khttp.post(
+            url = statusUrl,
+            data = mapOf("deviceId" to deviceId, "messageId" to messageId, "status" to status)
+        )
     }
 }
