@@ -14,13 +14,27 @@ class SMS(val message: String, val number: String)
 class SendTask constructor(_URL: String) : TimerTask() {
     var URL: String = _URL
 
-    override fun run() {
-        val apiResponse = URL(URL).readText()
-        val sms = Klaxon().parse<SMS>(apiResponse)
 
-        val smsManager = SmsManager.getDefault() as SmsManager
-        smsManager.sendTextMessage(sms!!.number, null, sms!!.message, null, null)
-        
+    override fun run() {
+
+        val apiResponse = URL(URL).readText()
+        Log.d("URL>>>",URL)
+        Log.d("apiResponse",apiResponse)
+        try {
+            val sms = Klaxon().parse<SMS>(apiResponse)
+            val smsManager = SmsManager.getDefault() as SmsManager
+            smsManager.sendTextMessage(sms!!.number, null, sms!!.message, null, null)
+
+        }
+        catch (e: com.beust.klaxon.KlaxonException) {
+            Log.d("error","Error whle parsing URL")
+        }
+        finally {
+            // optional finally block
+        }
+
+
+
     }
 
 }
