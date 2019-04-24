@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         if (settingsManager.isSendEnabled){
             msgShow("shouldstart!")
-           // Timer("SendSMS", true).scheduleAtFixedRate(SendTask(URL), 0, 1500)
+            Timer("SendSMS", true).scheduleAtFixedRate(SendTask(settingsManager, this), 0, 1500)
         }
 
         // Here, thisActivity is the current activity

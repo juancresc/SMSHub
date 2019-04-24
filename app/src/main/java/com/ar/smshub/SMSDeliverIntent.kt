@@ -7,15 +7,8 @@ import android.content.Intent
 import android.app.Activity
 
 
-class SMSSendIntent : BroadcastReceiver() {
+class SMSDeliverIntent : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        when (resultCode) {
-            Activity.RESULT_OK -> {
-                //sent SMS message successfully;
-            }
-            else -> {
-                //sent SMS message failed
-            }
-        }
+
     }
 }
