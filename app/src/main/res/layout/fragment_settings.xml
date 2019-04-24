@@ -31,18 +31,18 @@
 
         <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.1"
-                android:textSize="20sp"
-                android:text="URL"/>
+                android:textSize="15sp"
+                android:text="Send URL"/>
 
         <EditText
-                android:id="@+id/textURL"
+                android:id="@+id/textSendURL"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.75"
                 android:ems="10" android:singleLine="true" android:selectAllOnFocus="true" android:inputType="textUri"
-                android:text="http://www.yourweb.com/api.php"/>
+                />
     </LinearLayout>
 
 
@@ -53,12 +53,44 @@
 
         <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight="0.17"
                 android:textSize="15sp"
-                android:text="You have to pass 'message' and 'number' as a JSON object"/>
+                android:text="Receive URL"/>
 
+        <EditText
+                android:id="@+id/textReceiveURL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10" android:singleLine="true" android:selectAllOnFocus="true" android:inputType="textUri"
+        />
     </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.17"
+                android:textSize="15sp"
+                android:text="Status URL"/>
+
+        <EditText
+                android:id="@+id/textStatusURL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10" android:singleLine="true" android:selectAllOnFocus="true" android:inputType="textUri"
+        />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
 
 
     <LinearLayout
@@ -79,7 +111,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.75"
-                android:ems="10" android:inputType="number" android:text="3"/>
+                android:ems="10" android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout
@@ -101,8 +133,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.75"
                 android:ems="10" android:inputType="text"
-                android:hint="Will be send as 'id' in GET method "/>
+                />
     </LinearLayout>
+
 
 
 

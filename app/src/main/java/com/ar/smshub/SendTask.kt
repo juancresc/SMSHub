@@ -1,5 +1,6 @@
 package com.ar.smshub
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.content.ContextCompat.startActivity
@@ -11,19 +12,19 @@ import java.util.*
 
 class SMS(val message: String, val number: String)
 
-class SendTask constructor(_URL: String) : TimerTask() {
-    var URL: String = _URL
+class SendTask constructor(_settings: SettingsManager) : TimerTask() {
+    var settings = _settings
 
 
     override fun run() {
 
-        val apiResponse = URL(URL).readText()
-        Log.d("URL>>>",URL)
-        Log.d("apiResponse",apiResponse)
+        var pendingIntent = PendingIntent();
+
+        val apiResponse = URL(settings.sendURL).readText()
         try {
             val sms = Klaxon().parse<SMS>(apiResponse)
             val smsManager = SmsManager.getDefault() as SmsManager
-            smsManager.sendTextMessage(sms!!.number, null, sms!!.message, null, null)
+            smsManager.sendTextMessage(sms!!.number, null, sms!!.message, new Pendi, null)
 
         }
         catch (e: com.beust.klaxon.KlaxonException) {

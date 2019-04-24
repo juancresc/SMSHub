@@ -53,21 +53,28 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val btnSave: Button = view.findViewById(R.id.btnSave)
-        val txtURL: EditText = view.findViewById(R.id.textURL)
+        val txtSendURL: EditText = view.findViewById(R.id.textSendURL)
+        val txtStatusURL: EditText = view.findViewById(R.id.textStatusURL)
+        val txtReceiveURL: EditText = view.findViewById(R.id.textReceiveURL)
         val txtInterval: EditText = view.findViewById(R.id.textInterval)
         val txtDeviceId: EditText = view.findViewById(R.id.textDeviceId)
         val switchIsEnabled: Switch = view.findViewById(R.id.switchIsEnabled)
 
         txtInterval.setText(settingsManager.interval.toString())
         switchIsEnabled.isChecked = settingsManager.isSendEnabled
-        txtURL.setText(settingsManager.URL)
+        txtSendURL.setText(settingsManager.sendURL)
+        txtReceiveURL.setText(settingsManager.receiveURL)
+        txtStatusURL.setText(settingsManager.statusURL)
         txtDeviceId.setText(settingsManager.deviceId)
 
         //save
         btnSave.setOnClickListener {
             settingsManager.setSettings(
+                switchIsEnabled.isChecked,
                 txtInterval.text.toString().toInt(),
-                txtURL.text.toString(),
+                txtSendURL.text.toString(),
+                txtReceiveURL.text.toString(),
+                txtStatusURL.text.toString(),
                 txtDeviceId.text.toString()
             )
             val fragment = MainFragment()
@@ -78,7 +85,30 @@ class SettingsFragment : Fragment() {
 
         //save
         switchIsEnabled.setOnClickListener {
-            settingsManager.setIsSendEnabled(switchIsEnabled.isChecked)
+            var ok = true
+            //if enabling first validate everything
+            if (switchIsEnabled.isChecked) {
+                if (txtInterval.text.toString() == "" ||
+                    txtSendURL.text.toString() == "" ||
+                    txtDeviceId.text.toString() == "" ||
+                    txtStatusURL.text.toString() == "" ||
+                    txtReceiveURL.text.toString() == "" ) {
+                    Toast.makeText(activity, "Please complete all fields", Toast.LENGTH_LONG).show()
+                    ok = false
+                }
+
+            }
+
+            if (ok) {
+                settingsManager.setSettings(
+                    switchIsEnabled.isChecked,
+                    txtInterval.text.toString().toInt(),
+                    txtSendURL.text.toString(),
+                    txtReceiveURL.text.toString(),
+                    txtStatusURL.text.toString(),
+                    txtDeviceId.text.toString()
+                )
+            }
         }
         return view
     }
