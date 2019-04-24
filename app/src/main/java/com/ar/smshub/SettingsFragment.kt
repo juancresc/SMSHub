@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment;
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,14 +35,17 @@ class SettingsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    var settingsManager = SettingsManager(this.activity)
+    protected lateinit var settingsManager: SettingsManager
+    protected lateinit var mainActivity: MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        settingsManager = SettingsManager(this.activity)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        mainActivity = this.activity as MainActivity
     }
 
     override fun onCreateView(
@@ -93,6 +97,7 @@ class SettingsFragment : Fragment() {
                     txtDeviceId.text.toString() == "" ||
                     txtStatusURL.text.toString() == "" ||
                     txtReceiveURL.text.toString() == "" ) {
+                    switchIsEnabled.isChecked = false
                     Toast.makeText(activity, "Please complete all fields", Toast.LENGTH_LONG).show()
                     ok = false
                 }
@@ -108,6 +113,12 @@ class SettingsFragment : Fragment() {
                     txtStatusURL.text.toString(),
                     txtDeviceId.text.toString()
                 )
+            }
+            if(switchIsEnabled.isChecked){
+                val interval = (settingsManager.interval.toInt() * 60 * 100).toLong()
+                Log.d("INTERVAL", interval.toString())
+                Timer("SendSMS", true).schedule(SendTask(settingsManager, this.activity), 0, interval)
+                mainActivity.mainFragment.logMain("Hello")
             }
         }
         return view

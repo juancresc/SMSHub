@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,6 +30,7 @@ class MainFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    protected lateinit var textMainLog: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,13 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        textMainLog = view.findViewById(R.id.textMainLog)
         return inflater.inflate(R.layout.fragment_main, container, false)
+    }
+
+
+    fun logMain(message: String){
+        textMainLog.text = textMainLog.text.toString() + message + "\n"
     }
 
     // TODO: Rename method, update argument and hook method into UI event

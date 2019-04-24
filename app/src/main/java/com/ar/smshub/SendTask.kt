@@ -39,8 +39,8 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
             sentIn.putExtra("messageId",sms!!.id)
             deliverIn.putExtra("messageId",sms!!.id)
             val smsManager = SmsManager.getDefault() as SmsManager
-            smsManager.sendTextMessage(sms!!.number, null, sms!!.message, sentPIn, deliverPIn)
-
+            //smsManager.sendTextMessage(sms!!.number, null, sms!!.message, sentPIn, deliverPIn)
+            Log.d("error","SEND")
         }
         catch (e: com.beust.klaxon.KlaxonException) {
             Log.d("error","Error while parsing URL")

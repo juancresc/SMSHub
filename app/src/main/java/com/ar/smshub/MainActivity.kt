@@ -1,7 +1,6 @@
 package com.ar.smshub
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -17,7 +16,9 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
-    var settingsManager = SettingsManager(this)
+    protected lateinit var settingsManager: SettingsManager
+    lateinit var mainFragment: MainFragment
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +26,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val fragment = MainFragment()
-        fragment.arguments = intent.extras
+        settingsManager = SettingsManager(this)
+
+        mainFragment = MainFragment()
+        mainFragment.arguments = intent.extras
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.main_view, fragment)
+        transaction.replace(R.id.main_view, mainFragment)
         transaction.commit()
 
         if (settingsManager.isSendEnabled){
@@ -63,6 +66,9 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
+
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
