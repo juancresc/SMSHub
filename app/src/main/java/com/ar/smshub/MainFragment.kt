@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment;
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,18 +41,24 @@ class MainFragment : Fragment() {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
         textMainLog = view.findViewById(R.id.textMainLog)
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        logMain("asddsaas")
+    }
 
-    fun logMain(message: String){
-        textMainLog.text = textMainLog.text.toString() + message + "\n"
+
+    fun logMain(message: String) {
+        textMainLog.setText(textMainLog.text.toString() + message + "\n")
     }
 
     // TODO: Rename method, update argument and hook method into UI event

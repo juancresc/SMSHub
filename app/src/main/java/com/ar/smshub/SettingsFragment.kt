@@ -85,6 +85,11 @@ class SettingsFragment : Fragment() {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.main_view, fragment)
             transaction.commit()
+            if (switchIsEnabled.isChecked) {
+                startTimer()
+            }else{
+                cancelTimer()
+            }
         }
 
         //save
@@ -96,7 +101,8 @@ class SettingsFragment : Fragment() {
                     txtSendURL.text.toString() == "" ||
                     txtDeviceId.text.toString() == "" ||
                     txtStatusURL.text.toString() == "" ||
-                    txtReceiveURL.text.toString() == "" ) {
+                    txtReceiveURL.text.toString() == ""
+                ) {
                     switchIsEnabled.isChecked = false
                     Toast.makeText(activity, "Please complete all fields", Toast.LENGTH_LONG).show()
                     ok = false
@@ -114,14 +120,26 @@ class SettingsFragment : Fragment() {
                     txtDeviceId.text.toString()
                 )
             }
-            if(switchIsEnabled.isChecked){
-                val interval = (settingsManager.interval.toInt() * 60 * 100).toLong()
-                Log.d("INTERVAL", interval.toString())
-                Timer("SendSMS", true).schedule(SendTask(settingsManager, this.activity), 0, interval)
-                mainActivity.mainFragment.logMain("Hello")
+            if (switchIsEnabled.isChecked) {
+                startTimer()
+            }else{
+                cancelTimer()
             }
         }
         return view
+    }
+    fun cancelTimer(){
+        mainActivity.timerSend.cancel()
+        mainActivity.timerSend = Timer("SendSMS", true)
+    }
+
+    fun startTimer(){
+        val interval = (settingsManager.interval.toInt() * 60 * 1000).toLong()
+        Log.d("INTERVAL", interval.toString())
+        mainActivity.timerSend.cancel()
+        mainActivity.timerSend = Timer("SendSMS", true)
+        mainActivity.timerSend.schedule(SendTask(settingsManager, this.activity), interval, interval)
+        mainActivity.mainFragment.logMain("Hello")
     }
 
     // TODO: Rename method, update argument and hook method into UI event

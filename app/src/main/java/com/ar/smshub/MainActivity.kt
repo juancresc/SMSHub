@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
     protected lateinit var settingsManager: SettingsManager
     lateinit var mainFragment: MainFragment
-
+    lateinit var timerSend: Timer;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,10 +33,15 @@ class MainActivity : AppCompatActivity() {
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.main_view, mainFragment)
         transaction.commit()
-
+        //initialize timer for the first time
+        if(::timerSend.isInitialized){
+            timerSend.cancel()
+        }
+        timerSend = Timer("SendSMS", true)
+        //if enabled start timer
         if (settingsManager.isSendEnabled){
-            msgShow("shouldstart!")
-            Timer("SendSMS", true).scheduleAtFixedRate(SendTask(settingsManager, this), 0, 1500)
+            val interval = (settingsManager.interval.toInt() * 60 * 1000).toLong()
+            timerSend.schedule(SendTask(settingsManager, this), interval, interval)
         }
 
         // Here, thisActivity is the current activity
