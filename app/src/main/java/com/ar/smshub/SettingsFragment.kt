@@ -7,6 +7,9 @@ import android.app.Fragment;
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_settings.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,9 +45,24 @@ class FragmentSettings : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        val btnSave: Button = view.findViewById(R.id.btnSave)
+        btnSave.setOnClickListener {
+            Toast.makeText(activity, "Settings updated", Toast.LENGTH_SHORT).show()
+            val firstFragment = MainActivity()
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.main_view, firstFragment)
+            transaction.commit()
+        }
+        // Return the fragment view/layout
+        return view
+
     }
 
+
+    fun msgShow(msg: String) {
+        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
+    }
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
