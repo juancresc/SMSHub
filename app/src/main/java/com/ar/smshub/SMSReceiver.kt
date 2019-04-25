@@ -7,6 +7,8 @@ import android.provider.Telephony
 import android.os.Build
 import android.telephony.SmsMessage
 import android.util.Log.*
+import android.support.v4.app.NotificationCompat.getExtras
+import android.os.Bundle
 
 
 class SMSReceiver : BroadcastReceiver() {
@@ -47,9 +49,16 @@ class SMSReceiver : BroadcastReceiver() {
             }
             e(TAG, smsBody)
             var settingsManager = SettingsManager(context)
-            var mainActivity = context as MainActivity
+
             PostReceivedMessage().execute(settingsManager.receiveURL, settingsManager.deviceId, smsBody, smsSender)
-            mainActivity.logMain("Posted received message from " + smsSender)
+
+
+            val i = Intent("SMS_RECEIVED")
+            // Data you need to pass to activity
+            i.putExtra("number", smsSender)
+            i.putExtra("message", smsBody)
+            context.sendBroadcast(i)
+
             if (::serviceProviderNumber.isInitialized && smsSender == serviceProviderNumber && smsBody.startsWith(
                     serviceProviderSmsCondition
                 )

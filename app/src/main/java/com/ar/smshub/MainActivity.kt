@@ -12,6 +12,12 @@ import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import android.support.v4.app.NotificationCompat.getExtras
+import android.content.Intent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +43,17 @@ class MainActivity : AppCompatActivity() {
         requestSMSSendPermission()
         requestSMSReadPermission()
 
+        // Inside OnCreate Method
+        registerReceiver(broadcastReceiver, IntentFilter("SMS_RECEIVED"))
+    }
+
+    val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val b = intent.extras
+            val number = b!!.getString("number")
+            val message = b!!.getString("message")
+            logMain("Message received and posted from: " + number + " - text: " + message)
+        }
     }
 
     fun logMain(message: String) {
@@ -45,9 +62,9 @@ class MainActivity : AppCompatActivity() {
         var scrollAmount =
             mainFragment.textMainLog.getLayout().getLineTop(mainFragment.textMainLog.getLineCount()) - mainFragment.textMainLog.getHeight()
         // if there is no need to scroll, scrollAmount will be <=0
-        if (scrollAmount > 0){
+        if (scrollAmount > 0) {
             mainFragment.textMainLog.scrollTo(0, scrollAmount)
-        }else{
+        } else {
             mainFragment.textMainLog.scrollTo(0, 0)
         }
     }
@@ -80,6 +97,7 @@ class MainActivity : AppCompatActivity() {
             timerSend.schedule(SendTask(settingsManager, this), interval, interval)
         }
     }
+
     fun requestSMSSendPermission() {
 
         // Here, thisActivity is the current activity
@@ -132,7 +150,11 @@ class MainActivity : AppCompatActivity() {
             // You may display a non-blocking explanation here, read more in the documentation:
             // https://developer.android.com/training/permissions/requesting.html
         }
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), MY_PERMISSIONS_REQUEST_SMS_RECEIVE)
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.RECEIVE_SMS),
+            MY_PERMISSIONS_REQUEST_SMS_RECEIVE
+        )
     }
 
 
@@ -178,13 +200,13 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> {
                 var settingsFragment = fragmentManager.findFragmentByTag("SETTINGS") as? SettingsFragment
-                if(settingsFragment == null){
+                if (settingsFragment == null) {
                     settingsFragment = SettingsFragment()
                 }
-                settingsFragment .arguments = intent.extras
+                settingsFragment.arguments = intent.extras
                 val transaction = fragmentManager.beginTransaction()
                 transaction.addToBackStack("MAIN")
-                transaction.replace(R.id.main_view, settingsFragment , "SETTINGS")
+                transaction.replace(R.id.main_view, settingsFragment, "SETTINGS")
                 transaction.commit()
                 true
             }
