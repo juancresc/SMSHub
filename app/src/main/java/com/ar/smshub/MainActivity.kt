@@ -16,12 +16,10 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
-    var SMS_PERMISSION_READ_CODE = 2
+    val MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10
 
     protected lateinit var settingsManager: SettingsManager
-    lateinit var timerSend: Timer;
-
-
+    lateinit var timerSend: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +39,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     fun logMain(message: String) {
         val mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
         mainFragment.textMainLog.setText(mainFragment.textMainLog.text.toString() + message + "\n")
+        var scrollAmount =
+            mainFragment.textMainLog.getLayout().getLineTop(mainFragment.textMainLog.getLineCount()) - mainFragment.textMainLog.getHeight()
+        // if there is no need to scroll, scrollAmount will be <=0
+        if (scrollAmount > 0){
+            mainFragment.textMainLog.scrollTo(0, scrollAmount)
+        }else{
+            mainFragment.textMainLog.scrollTo(0, 0)
+        }
     }
 
     fun updateTimer() {
@@ -66,17 +71,15 @@ class MainActivity : AppCompatActivity() {
         if (::timerSend.isInitialized) {
             timerSend.cancel()
         }
-
         timerSend = Timer("SendSMS", true)
         if (settingsManager.isSendEnabled) {
-            val minutes = settingsManager.interval.toInt() * 60
-            val interval = (minutes * 1000).toLong()
+            val minutes = settingsManager.interval * 60
+            val interval = (minutes * 100).toLong()
             //this does not work
             //logMain("Timer started at " + minutes.toString())
             timerSend.schedule(SendTask(settingsManager, this), interval, interval)
         }
     }
-
     fun requestSMSSendPermission() {
 
         // Here, thisActivity is the current activity
@@ -117,7 +120,7 @@ class MainActivity : AppCompatActivity() {
     fun isSmsPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
-            Manifest.permission.READ_SMS
+            Manifest.permission.RECEIVE_SMS
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -125,11 +128,11 @@ class MainActivity : AppCompatActivity() {
      * Request runtime SMS permission
      */
     private fun requestSMSReadPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_SMS)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
             // You may display a non-blocking explanation here, read more in the documentation:
             // https://developer.android.com/training/permissions/requesting.html
         }
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), SMS_PERMISSION_READ_CODE)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), MY_PERMISSIONS_REQUEST_SMS_RECEIVE)
     }
 
 
@@ -174,10 +177,14 @@ class MainActivity : AppCompatActivity() {
 
         return when (item.itemId) {
             R.id.action_settings -> {
-                val firstFragment = SettingsFragment()
-                firstFragment.arguments = intent.extras
+                var settingsFragment = fragmentManager.findFragmentByTag("SETTINGS") as? SettingsFragment
+                if(settingsFragment == null){
+                    settingsFragment = SettingsFragment()
+                }
+                settingsFragment .arguments = intent.extras
                 val transaction = fragmentManager.beginTransaction()
-                transaction.replace(R.id.main_view, firstFragment)
+                transaction.addToBackStack("MAIN")
+                transaction.replace(R.id.main_view, settingsFragment , "SETTINGS")
                 transaction.commit()
                 true
             }
@@ -188,4 +195,5 @@ class MainActivity : AppCompatActivity() {
     fun msgShow(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
+
 }

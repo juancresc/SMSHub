@@ -8,7 +8,7 @@ import android.app.Activity
 
 class SMSSendIntent : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        var status : String
+        var status: String
         when (resultCode) {
             Activity.RESULT_OK -> {
                 status = "SENT"
@@ -18,12 +18,17 @@ class SMSSendIntent : BroadcastReceiver() {
             }
         }
         var statusUrl = intent!!.getStringExtra("statusURL")
-        var deviceId =  intent!!.getStringExtra("deviceId")
-        var messageId =  intent!!.getStringExtra("messageId")
+        var deviceId = intent!!.getStringExtra("deviceId")
+        var messageId = intent!!.getStringExtra("messageId")
 
         khttp.post(
             url = statusUrl,
-            data = mapOf("deviceId" to deviceId, "messageId" to messageId, "status" to status)
+            data = mapOf(
+                "deviceId" to deviceId,
+                "messageId" to messageId,
+                "status" to status,
+                "action" to "STATUS_UPDATE"
+            )
         )
     }
 }

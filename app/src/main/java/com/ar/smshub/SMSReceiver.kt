@@ -9,7 +9,7 @@ import android.telephony.SmsMessage
 import android.util.Log.*
 
 
-class SMSReceivedIntent : BroadcastReceiver() {
+class SMSReceiver : BroadcastReceiver() {
 
 
     private var TAG = "SmsBroadcastReceiver"
@@ -43,11 +43,17 @@ class SMSReceivedIntent : BroadcastReceiver() {
                         smsBody += messages[i]!!.getMessageBody()
                     }
                     smsSender = messages[0]!!.getOriginatingAddress()
-                    e(TAG, smsBody)
                 }
             }
-
-            if (smsSender == serviceProviderNumber && smsBody.startsWith(serviceProviderSmsCondition)) {
+            e(TAG, smsBody)
+            var settingsManager = SettingsManager(context)
+            var mainActivity = context as MainActivity
+            PostReceivedMessage().execute(settingsManager.receiveURL, settingsManager.deviceId, smsBody, smsSender)
+            mainActivity.logMain("Posted received message from " + smsSender)
+            if (::serviceProviderNumber.isInitialized && smsSender == serviceProviderNumber && smsBody.startsWith(
+                    serviceProviderSmsCondition
+                )
+            ) {
                 if (listener != null) {
                     listener!!.onTextReceived(smsBody)
                 }

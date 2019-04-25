@@ -81,10 +81,12 @@ class SettingsFragment : Fragment() {
                 txtStatusURL.text.toString(),
                 txtDeviceId.text.toString()
             )
-            val fragment = MainFragment()
+            val mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.main_view, fragment, "MAIN")
+            transaction.addToBackStack("SETTINGS")
+            transaction.replace(R.id.main_view, mainFragment, "MAIN")
             transaction.commit()
+            fragmentManager.executePendingTransactions()
             mainActivity.updateTimer()
         }
 

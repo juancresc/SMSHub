@@ -39,7 +39,7 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
             val smsManager = SmsManager.getDefault() as SmsManager
             //smsManager.sendTextMessage(sms!!.number, null, sms!!.message, sentPIn, deliverPIn)
             mainActivity.runOnUiThread(Runnable {
-                mainActivity.logMain("Sent to " + sms!!.number + " msgId: " + sms!!.id + " : " + sms!!.message)
+                mainActivity.logMain("Sent to: " + sms!!.number + " - id: " + sms!!.id + " - message: " + sms!!.message)
             })
 
 

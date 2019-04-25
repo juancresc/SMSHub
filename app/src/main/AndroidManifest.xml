@@ -20,11 +20,12 @@
             </intent-filter>
             <!-- Declare SMS Broadcast receiver -->
         </activity>
-        <receiver android:name=".SMSReceivedIntent">
+        <receiver android:name=".SMSReceiver" android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>

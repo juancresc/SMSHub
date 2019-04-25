@@ -22,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" android:id="@+id/main_view"/>
+    <include layout="@layout/content_main" android:id="@+id/main_view" android:scrollbarAlwaysDrawVerticalTrack="true"/>
 
 
 </android.support.design.widget.CoordinatorLayout>
