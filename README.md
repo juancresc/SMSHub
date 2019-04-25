@@ -64,7 +64,11 @@ Instead you can use your own phone line to send SMS with an Android phone as a g
 
 you can customize the next settings directly in the application
 
+#### Send SMS:
++ *Enable sending*: whether the app should read from the API and send messages
 + *send URL*: messages will be parsed from this URL, you return a JSON containing *message*, *number* and *id*
-+ *interval*: the app will check whether there is an incoming message each specific interval in minutes
++ *interval*: the app will check whether there is an incoming message for sending each specific interval in minutes
 + *status URL*: once a message is sent, status will be reported to this URL via GET parameters, *id* and *status* (SENT, FAILED, DELIVERED)
+
+#### Receive SMS:
 + *received URL*: Message received will be posted here. If nothing is specified it will skip this action.
