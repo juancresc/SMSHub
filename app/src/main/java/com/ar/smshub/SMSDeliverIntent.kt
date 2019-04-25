@@ -17,7 +17,7 @@ class SMSDeliverIntent : BroadcastReceiver() {
         khttp.post(
             url = statusUrl,
             data = mapOf("deviceId" to deviceId, "messageId" to messageId, "status" to "DELIVERED",
-                "action" to "DELIVERED")
+                "action" to "STATUS")
         )
     }
 }

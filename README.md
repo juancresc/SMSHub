@@ -38,7 +38,7 @@ POST https://yourcustomurl.com/status_api
     deviceId: 1
     messageId: 1
     status: DELIVERED
-    action: DELIVERED
+    action: STATUS
 ```
 
 Possible _status_ values are: SENT, FAILED, DELIVERED
