@@ -26,8 +26,8 @@ https://yourcustomurl.com/send_api
 ```
 POST https://yourcustomurl.com/status_api
     deviceId: 1
-    messageId=1
-    status=SENT
+    messageId: 1
+    status: SENT
     action: STATUS
 ```
 
@@ -36,8 +36,8 @@ POST https://yourcustomurl.com/status_api
 ```
 POST https://yourcustomurl.com/status_api
     deviceId: 1
-    messageId=1
-    status=DELIVERED
+    messageId: 1
+    status: DELIVERED
     action: DELIVERED
 ```
 
