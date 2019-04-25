@@ -28,6 +28,7 @@ POST https://yourcustomurl.com/status_api
     deviceId: 1
     messageId=1
     status=SENT
+    action: STATUS
 ```
 
 5- Once delivered the app will notify the status to the status URL
@@ -37,6 +38,7 @@ POST https://yourcustomurl.com/status_api
     deviceId: 1
     messageId=1
     status=DELIVERED
+    action: DELIVERED
 ```
 
 Possible _status_ values are: SENT, FAILED, DELIVERED
@@ -49,6 +51,7 @@ POST https://yourcustomurl.com/received_api
     deviceId: 1
     number: 3472556699
     message: Hello man!
+    action: RECEIVED
 ```
 
 
