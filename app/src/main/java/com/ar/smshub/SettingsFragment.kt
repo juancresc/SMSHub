@@ -83,7 +83,7 @@ class SettingsFragment : Fragment() {
             )
             val fragment = MainFragment()
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.main_view, fragment)
+            transaction.replace(R.id.main_view, fragment, "MAIN")
             transaction.commit()
             mainActivity.updateTimer()
         }

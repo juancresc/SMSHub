@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     var SMS_PERMISSION_READ_CODE = 2
 
     protected lateinit var settingsManager: SettingsManager
-    lateinit var mainFragment: MainFragment
     lateinit var timerSend: Timer;
 
 
@@ -29,16 +28,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         settingsManager = SettingsManager(this)
-        mainFragment = MainFragment()
+        var mainFragment = MainFragment()
         mainFragment.arguments = intent.extras
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.main_view, mainFragment)
+        transaction.replace(R.id.main_view, mainFragment, "MAIN")
         transaction.commit()
         fragmentManager.executePendingTransactions()
         //initialize timer for the first time
         updateTimer()
         requestSMSSendPermission()
         requestSMSReadPermission()
+
+    }
+
+
+    fun logMain(message: String) {
+        val mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
+        mainFragment.textMainLog.setText(mainFragment.textMainLog.text.toString() + message + "\n")
     }
 
     fun updateTimer() {
@@ -66,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             val minutes = settingsManager.interval.toInt() * 60
             val interval = (minutes * 1000).toLong()
             //this does not work
-            //mainFragment.logMain("Timer started at " + minutes.toString())
+            //logMain("Timer started at " + minutes.toString())
             timerSend.schedule(SendTask(settingsManager, this), interval, interval)
         }
     }

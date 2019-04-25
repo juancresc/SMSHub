@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:padding="10sp"
+              android:orientation="vertical"
              tools:context=".MainFragment">
-
-    <!-- TODO: Update blank fragment layout -->
     <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/textMainLog"/>
-
-</FrameLayout>
+            android:layout_height="506dp" android:id="@+id/textMainLog" android:background="#002E0404"
+            android:text="ee"/>
+    <Button
+            android:text="Clear log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/buttonClearLog"/>
+</LinearLayout>

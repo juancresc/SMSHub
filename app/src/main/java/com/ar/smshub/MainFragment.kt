@@ -8,8 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_main.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,7 +43,6 @@ class MainFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,13 +50,14 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         textMainLog = view.findViewById(R.id.textMainLog)
+        var buttonClearLog = view.findViewById(R.id.buttonClearLog) as Button
+        buttonClearLog.setOnClickListener {
+            this.textMainLog.setText("")
+        }
+
         return view
     }
 
-
-    fun logMain(message: String) {
-        textMainLog.setText(textMainLog.text.toString() + message + "\n")
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
