@@ -11,7 +11,7 @@ It connects to a webpage to retrieve messages to be sent (in JSON format) at reg
 Commercial SMS APIs are (for most cases) prohibitively expensive. 
 Instead you can use your own phone line to send SMS with an Android phone as a gateway.
 
-There are other SMS gateways projects but as far as I could check when this project started, none of them can be use to send and receive SMS via HTTP API easily and free (with no commercial dependencies).
+There are other SMS gateways projects but as far as I could check when this project started, none of them can be use to send and receive SMS via HTTP API easily and freely (with no commercial dependencies).
 
 
 ## how?
