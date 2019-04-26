@@ -1,5 +1,5 @@
 # SMSHub
-Android application for sending and receiving SMS via HTTP API in Kotlin
+Android SMS Gateway application for sending and receiving SMS via HTTP API in Kotlin
 
 ## what?
 
