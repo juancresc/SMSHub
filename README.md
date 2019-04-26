@@ -3,7 +3,7 @@
 ## what?
 
 SMSHub is an SMS Gateway application for Android phones you can use to add SMS functionality to your software.
-It connects to a webpage to retrieve messages to be sent (in JSON format) at regular intervals. Also notify about delivery status and incoming messages. 
+It connects to a webpage to retrieve messages to be sent (in JSON format) at regular intervals. It also notifies about delivery status and incoming messages. 
 
 ## how?
 
