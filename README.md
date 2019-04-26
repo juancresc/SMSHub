@@ -62,6 +62,8 @@ POST https://yourcustomurl.com/received_api
 Commercial SMS APIs are (depending on the case) prohibitively expensive. 
 Instead you can use your own phone line to send SMS with an Android phone as a gateway.
 
+There are other SMS gateways projects but as far as I could check, none of them serve to this project's purpose.
+
 ## settings
 
 you can customize the next settings directly in the application
