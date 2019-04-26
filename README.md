@@ -1,9 +1,9 @@
 # SMSHub
-Android SMS Gateway application for sending and receiving SMS via HTTP API in Kotlin
 
 ## what?
 
-SMSHub is an application for Android phones you can use to add SMS functionality to your software (notifications).
+SMSHub is an SMS Gateway application for Android phones you can use to add SMS functionality to your software (notifications).
+It connects to a webpage to retrieve messages to be sent (in JSON format) at regular intervals. Also notify about delivery status and incoming messages. 
 
 ## how?
 
