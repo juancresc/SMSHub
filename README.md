@@ -43,7 +43,7 @@ POST https://yourcustomurl.com/status_api
     action: STATUS
 ```
 
-Possible _status_ values are: SENT, FAILED, DELIVERED
+Possible _status_ values are: SENT, FAILED, DELIVERED (notice that it is unlikely but possible to get the DELIVERED update before the SENT update due to requests delay).
 
 ### Receive SMSs
 
