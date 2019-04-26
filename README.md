@@ -12,7 +12,9 @@ SMSHub is an application for Android phones you can use to add SMS functionality
 1- The application connects at regular intervals to a URL
 
 ```
-https://yourcustomurl.com/send_api
+POST https://yourcustomurl.com/send_api
+    deviceId: 1
+    action: SEND
 ```
 
 2- It should read a JSON containing *message*, *number* and *id*, or an empty response if there is nothing to send
