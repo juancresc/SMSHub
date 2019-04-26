@@ -28,7 +28,7 @@ you can customize the next settings directly in the application
 + *status URL*: once a message is sent, status will be reported to this URL via GET parameters, *id* and *status* (SENT, FAILED, DELIVERED)
 
 #### Receive SMS:
-+ *received URL*: Message received will be posted here. If nothing is specified it will skip this action.
++ *receive URL*: Message received will be posted here. If nothing is specified it will skip this action.
 
 
 ### How sending SMSs works
