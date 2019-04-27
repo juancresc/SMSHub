@@ -24,9 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
     val MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10
+    val SENT_SMS_FLAG = "SENT_SMS"
+    val RECEIVED_SMS_FLAG = "SMS_RECEIVED"
+    val DELIVER_SMS_FLAG = "DELIVER_SMS"
 
     protected lateinit var settingsManager: SettingsManager
     lateinit var timerSend: Timer
+    var sendIntent = SMSSendIntent()
+    var deliverIntent = SMSSendIntent()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,17 +50,23 @@ class MainActivity : AppCompatActivity() {
         requestSMSReadPermission()
 
         // Inside OnCreate Method
-        registerReceiver(broadcastReceiver, IntentFilter("SMS_RECEIVED"))
+        registerReceiver(broadcastReceiver, IntentFilter(RECEIVED_SMS_FLAG))
+        registerReceiver(sendIntent, IntentFilter(SENT_SMS_FLAG))
+        registerReceiver(deliverIntent, IntentFilter(DELIVER_SMS_FLAG))
     }
+
+
 
     val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            intent.flags
             val b = intent.extras
             val number = b!!.getString("number")
             val message = b!!.getString("message")
             logMain("Message received and posted from: " + number + " - text: " + message)
         }
     }
+
 
     fun logMain(message: String, newline: Boolean = true) {
         val mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
@@ -96,7 +107,12 @@ class MainActivity : AppCompatActivity() {
         timerSend = Timer("SendSMS", true)
         if (settingsManager.isSendEnabled) {
             val seconds = settingsManager.interval * 60
-            val interval = (seconds * 1000).toLong()
+            val interval: Long
+            if (BuildConfig.DEBUG) {
+                interval = (seconds * 100).toLong()
+            } else {
+                interval = (seconds * 1000).toLong()
+            }
             //this does not work
             //logMain("Timer started at " + minutes.toString())
             Log.d("---->", "Timer started at " + interval.toString())

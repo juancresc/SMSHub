@@ -37,6 +37,8 @@ class SettingsFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     protected lateinit var settingsManager: SettingsManager
     protected lateinit var mainActivity: MainActivity
+    val SENT_SMS_FLAG = "SENT_SMS"
+    val DELIVER_SMS_FLAG = "DELIVER_SMS"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +89,7 @@ class SettingsFragment : Fragment() {
             transaction.replace(R.id.main_view, mainFragment, "MAIN")
             transaction.commit()
             fragmentManager.executePendingTransactions()
-            mainActivity.updateTimer()
+            //mainActivity.updateTimer()
         }
 
         //save

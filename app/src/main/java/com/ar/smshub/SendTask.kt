@@ -6,11 +6,10 @@ import android.content.Intent
 import android.telephony.SmsManager
 import android.util.Log
 import com.beust.klaxon.Klaxon
-import java.net.URL
 import java.util.*
 
 
-class SMS(val message: String, val number: String, val id: String)
+class SMS(val message: String, val number: String, val messageId: String)
 
 class SendTask constructor(_settings: SettingsManager, _context: Context) : TimerTask() {
     var settings = _settings
@@ -18,18 +17,6 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
 
     override fun run() {
 
-        val SENT_SMS_FLAG = "SENT_SMS"
-        val DELIVER_SMS_FLAG = "DELIVER_SMS"
-
-        val sentIn = Intent(SENT_SMS_FLAG)
-        sentIn.putExtra("statusURL", settings.statusURL)
-        sentIn.putExtra("deviceId", settings.deviceId)
-        val sentPIn = PendingIntent.getBroadcast(mainActivity, 0, sentIn, 0)
-
-        val deliverIn = Intent(DELIVER_SMS_FLAG)
-        deliverIn.putExtra("statusURL", settings.statusURL)
-        deliverIn.putExtra("deviceId", settings.deviceId)
-        val deliverPIn = PendingIntent.getBroadcast(mainActivity, 0, deliverIn, 0)
 
         var apiResponse = khttp.post(
             url = settings.sendURL,
@@ -38,35 +25,50 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
                 "action" to "SEND"
             )
         )
-
+        var sms: SMS? = SMS("", "", "")
+        var canSend: Boolean = false
         try {
-            val sms = Klaxon().parse<SMS>(apiResponse.text)
-            sentIn.putExtra("messageId", sms!!.id)
-            deliverIn.putExtra("messageId", sms!!.id)
-            val smsManager = SmsManager.getDefault() as SmsManager
-            //smsManager.sendTextMessage(sms!!.number, null, sms!!.message, sentPIn, deliverPIn)
-            mainActivity.runOnUiThread(Runnable {
-                mainActivity.logMain("Sent to: " + sms!!.number + " - id: " + sms!!.id + " - message: " + sms!!.message)
-            })
-
-
-            Log.d("error", "SEND")
+            sms = Klaxon().parse<SMS>(apiResponse.text)
+            canSend = true
         } catch (e: com.beust.klaxon.KlaxonException) {
-            if(apiResponse.text == ""){
+            if (apiResponse.text == "") {
                 mainActivity.runOnUiThread(Runnable {
                     mainActivity.logMain(".", false)
                 })
                 Log.d("-->", "Nothing")
-            }else{
+            } else {
                 mainActivity.runOnUiThread(Runnable {
-                    mainActivity.logMain("Error parsing response from server")
+                    mainActivity.logMain("Error parsing response from server: " + apiResponse.text)
                 })
                 Log.d("error", "Error while parsing SMS")
             }
-
-
         } finally {
             // optional finally block
+        }
+        if (canSend) {
+            val sentIn = Intent(mainActivity.SENT_SMS_FLAG)
+            sentIn.putExtra("messageId", sms!!.messageId)
+            sentIn.putExtra("statusURL", settings.statusURL)
+            sentIn.putExtra("deviceId", settings.deviceId)
+            sentIn.putExtra("delivered", 0)
+
+
+            val sentPIn = PendingIntent.getBroadcast(mainActivity, 0, sentIn, 0)
+
+            val deliverIn = Intent(mainActivity.DELIVER_SMS_FLAG)
+            deliverIn.putExtra("messageId", sms!!.messageId)
+            deliverIn.putExtra("statusURL", settings.statusURL)
+            deliverIn.putExtra("deviceId", settings.deviceId)
+            deliverIn.putExtra("delivered", 1)
+
+            val deliverPIn = PendingIntent.getBroadcast(mainActivity, 0, deliverIn, 0)
+
+            val smsManager = SmsManager.getDefault() as SmsManager
+            smsManager.sendTextMessage(sms!!.number, null, sms!!.message, sentPIn, deliverPIn)
+            mainActivity.runOnUiThread(Runnable {
+                mainActivity.logMain("Sent to: " + sms!!.number + " - id: " + sms!!.messageId + " - message: " + sms!!.message)
+            })
+
         }
 
 
