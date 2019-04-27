@@ -1,13 +1,37 @@
 # SMSHub
-Android application for sending and receiving SMS via HTTP API in Kotlin
 
 ## what?
 
-SMSHub is an application for Android phones you can use to add SMS functionality to your software (notifications).
+SMSHub is an SMS Gateway application for Android phones (Android Studio project developed in Kotlin) you can use to add SMS functionality to your software.
+It connects to a webpage to retrieve messages to be sent (in JSON format) at regular intervals. It also notifies about delivery status and incoming messages. 
+
+
+## why?
+
+Commercial SMS APIs are (for most cases) prohibitively expensive. 
+Instead you can use your own phone line to send SMS with an Android phone as a gateway.
+
+There are other SMS gateways projects but as far as I could check when this project started, none of them can be use to send and receive SMS via HTTP API easily and freely (with no commercial dependencies).
+
 
 ## how?
 
-### Send SMSs
+
+### settings
+
+you can customize the next settings directly in the application
+
+#### Send SMS:
++ *Enable sending*: whether the app should read from the API and send messages
++ *send URL*: messages will be parsed from this URL, you return a JSON containing *message*, *number* and *id*
++ *interval*: the app will check whether there is an incoming message for sending each specific interval in minutes
++ *status URL*: once a message is sent, status will be reported to this URL via GET parameters, *id* and *status* (SENT, FAILED, DELIVERED)
+
+#### Receive SMS:
++ *receive URL*: Message received will be posted here. If nothing is specified it will skip this action.
+
+
+### How sending SMSs works
 
 1- The application connects at regular intervals to a URL
 
@@ -43,9 +67,10 @@ POST https://yourcustomurl.com/status_api
     action: STATUS
 ```
 
-Possible _status_ values are: SENT, FAILED, DELIVERED
+Possible _status_ values are: SENT, FAILED, DELIVERED (notice that it is unlikely but possible to get the DELIVERED update before the SENT update due to requests delay).
 
-### Receive SMSs
+
+### How receiving SMSs works
 
 1- Each time a SMS is received the app will notify the received URL
 ```
@@ -56,21 +81,3 @@ POST https://yourcustomurl.com/received_api
     action: RECEIVED
 ```
 
-
-## why?
-
-Commercial SMS APIs are (depending on the case) prohibitively expensive. 
-Instead you can use your own phone line to send SMS with an Android phone as a gateway.
-
-## settings
-
-you can customize the next settings directly in the application
-
-#### Send SMS:
-+ *Enable sending*: whether the app should read from the API and send messages
-+ *send URL*: messages will be parsed from this URL, you return a JSON containing *message*, *number* and *id*
-+ *interval*: the app will check whether there is an incoming message for sending each specific interval in minutes
-+ *status URL*: once a message is sent, status will be reported to this URL via GET parameters, *id* and *status* (SENT, FAILED, DELIVERED)
-
-#### Receive SMS:
-+ *received URL*: Message received will be posted here. If nothing is specified it will skip this action.
