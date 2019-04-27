@@ -8,7 +8,7 @@ import com.ar.smshub.R
 class SettingsManager {
 
     var isSendEnabled: Boolean = false
-    var interval: Int = 3
+    var interval: Int
     var sendURL: String = ""
     var statusURL: String = ""
     var receiveURL: String = ""

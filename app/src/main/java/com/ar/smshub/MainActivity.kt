@@ -17,6 +17,7 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.util.Log
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,9 +57,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun logMain(message: String) {
+    fun logMain(message: String, newline: Boolean = true) {
         val mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
-        mainFragment.textMainLog.setText(mainFragment.textMainLog.text.toString() + message + "\n")
+        if (newline) {
+            mainFragment.textMainLog.setText(mainFragment.textMainLog.text.toString() + "\n" + message)
+        } else {
+            mainFragment.textMainLog.setText(mainFragment.textMainLog.text.toString() + message)
+        }
         var scrollAmount =
             mainFragment.textMainLog.getLayout().getLineTop(mainFragment.textMainLog.getLineCount()) - mainFragment.textMainLog.getHeight()
         // if there is no need to scroll, scrollAmount will be <=0
@@ -90,10 +95,11 @@ class MainActivity : AppCompatActivity() {
         }
         timerSend = Timer("SendSMS", true)
         if (settingsManager.isSendEnabled) {
-            val minutes = settingsManager.interval * 60
-            val interval = (minutes * 100).toLong()
+            val seconds = settingsManager.interval * 60
+            val interval = (seconds * 1000).toLong()
             //this does not work
             //logMain("Timer started at " + minutes.toString())
+            Log.d("---->", "Timer started at " + interval.toString())
             timerSend.schedule(SendTask(settingsManager, this), interval, interval)
         }
     }
@@ -203,7 +209,6 @@ class MainActivity : AppCompatActivity() {
                 if (settingsFragment == null) {
                     settingsFragment = SettingsFragment()
                 }
-                settingsFragment.arguments = intent.extras
                 val transaction = fragmentManager.beginTransaction()
                 transaction.addToBackStack("MAIN")
                 transaction.replace(R.id.main_view, settingsFragment, "SETTINGS")

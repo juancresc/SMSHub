@@ -31,9 +31,16 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
         deliverIn.putExtra("deviceId", settings.deviceId)
         val deliverPIn = PendingIntent.getBroadcast(mainActivity, 0, deliverIn, 0)
 
-        val apiResponse = URL(settings.sendURL).readText()
+        var apiResponse = khttp.post(
+            url = settings.sendURL,
+            data = mapOf(
+                "deviceId" to settings.deviceId,
+                "action" to "SEND"
+            )
+        )
+
         try {
-            val sms = Klaxon().parse<SMS>(apiResponse)
+            val sms = Klaxon().parse<SMS>(apiResponse.text)
             sentIn.putExtra("messageId", sms!!.id)
             deliverIn.putExtra("messageId", sms!!.id)
             val smsManager = SmsManager.getDefault() as SmsManager
@@ -45,7 +52,19 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
 
             Log.d("error", "SEND")
         } catch (e: com.beust.klaxon.KlaxonException) {
-            Log.d("error", "Error while parsing URL")
+            if(apiResponse.text == ""){
+                mainActivity.runOnUiThread(Runnable {
+                    mainActivity.logMain(".", false)
+                })
+                Log.d("-->", "Nothing")
+            }else{
+                mainActivity.runOnUiThread(Runnable {
+                    mainActivity.logMain("Error parsing response from server")
+                })
+                Log.d("error", "Error while parsing SMS")
+            }
+
+
         } finally {
             // optional finally block
         }

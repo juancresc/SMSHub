@@ -5,11 +5,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <integer name="preference_default_interval">3</integer>
+    <integer name="preference_default_interval">1</integer>
     <bool name="preference_default_send_enabled">false</bool>
-    <string name="preference_default_send_url">http://www.yoururl.com/api/send</string>
-    <string name="preference_default_receive_url">http://www.yoururl.com/api/receive</string>
-    <string name="preference_default_status_url">http://www.yoururl.com/api/status</string>
+    <string name="preference_default_send_url">/send_api.php</string>
+    <string name="preference_default_receive_url">/receive_api.php</string>
+    <string name="preference_default_status_url">/status_api.php</string>
     <string name="preference_default_device_id">1</string>
 
     <string name="preference_file_key">com.ar.smshub.prefs</string>
