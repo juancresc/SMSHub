@@ -37,6 +37,7 @@ class SMSSendIntent : BroadcastReceiver() {
         doAsync {
             lateinit var res: Response
             try {
+                Log.d("-->", "Post status to " + statusUrl)
                 var res = khttp.post(
                     url = statusUrl,
                     data = mapOf(
