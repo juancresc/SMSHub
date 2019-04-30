@@ -21,7 +21,7 @@ import android.util.Log
 
 
 class MainActivity : AppCompatActivity() {
-
+    var request_code = 0
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
     val MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10
     val SENT_SMS_FLAG = "SENT_SMS"
@@ -56,6 +56,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    fun getRequestCode(): Int {
+        return ++this.request_code
+    }
 
     val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
