@@ -25,7 +25,7 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
                     "action" to "SEND"
                 )
             )
-        } catch (e: java.net.ConnectException) {
+        } catch (e: Exception) {
             Log.d("-->", "Cannot connect to URL")
             return
         }
