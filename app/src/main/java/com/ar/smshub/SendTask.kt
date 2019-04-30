@@ -7,7 +7,7 @@ import android.telephony.SmsManager
 import android.util.Log
 import com.beust.klaxon.Klaxon
 import java.util.*
-
+import khttp.responses.Response
 
 class SMS(val message: String, val number: String, val messageId: String)
 
@@ -16,15 +16,19 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
     var mainActivity: MainActivity = _context as MainActivity
 
     override fun run() {
-
-
-        var apiResponse = khttp.post(
-            url = settings.sendURL,
-            data = mapOf(
-                "deviceId" to settings.deviceId,
-                "action" to "SEND"
+        lateinit var apiResponse : Response
+        try {
+            apiResponse = khttp.post(
+                url = settings.sendURL,
+                data = mapOf(
+                    "deviceId" to settings.deviceId,
+                    "action" to "SEND"
+                )
             )
-        )
+        } catch (e: java.net.ConnectException) {
+            Log.d("-->", "Cannot connect to URL")
+            return
+        }
         var sms: SMS? = SMS("", "", "")
         var canSend: Boolean = false
         try {
@@ -53,7 +57,7 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
             sentIn.putExtra("delivered", 0)
 
 
-            val sentPIn = PendingIntent.getBroadcast(mainActivity, 0, sentIn,PendingIntent.FLAG_UPDATE_CURRENT)
+            val sentPIn = PendingIntent.getBroadcast(mainActivity, 0, sentIn, PendingIntent.FLAG_UPDATE_CURRENT)
 
             val deliverIn = Intent(mainActivity.DELIVER_SMS_FLAG)
             deliverIn.putExtra("messageId", sms!!.messageId)

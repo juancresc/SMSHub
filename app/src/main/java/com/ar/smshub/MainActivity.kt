@@ -86,6 +86,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateTimer() {
+        settingsManager.updateSettings()
+        Log.d("---->", "Update timer")
+        Log.d("--->setM.isSend", settingsManager.isSendEnabled.toString())
         if (settingsManager.isSendEnabled) {
             startTimer()
         } else {
@@ -94,6 +97,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun cancelTimer() {
+        Log.d("---->", "Cancel timer")
         if (::timerSend.isInitialized) {
             timerSend.cancel()
         }
@@ -101,6 +105,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startTimer() {
+        Log.d("---->", "Start timer")
         if (::timerSend.isInitialized) {
             timerSend.cancel()
         }

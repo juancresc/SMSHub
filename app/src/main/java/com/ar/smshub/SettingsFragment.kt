@@ -111,6 +111,7 @@ class SettingsFragment : Fragment() {
             }
 
             if (ok) {
+                Log.d("--->switchIsEnabled", switchIsEnabled.isChecked.toString())
                 settingsManager.setSettings(
                     switchIsEnabled.isChecked,
                     txtInterval.text.toString().toInt(),

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.app.Activity
 import android.os.AsyncTask
 import android.util.Log
+import khttp.responses.Response
 import org.jetbrains.anko.doAsync
 
 
@@ -29,21 +30,29 @@ class SMSSendIntent : BroadcastReceiver() {
         }
 
         var statusUrl = intent!!.getStringExtra("statusURL")
-        var deviceId =  intent!!.getStringExtra("deviceId")
+        var deviceId = intent!!.getStringExtra("deviceId")
         var messageId = intent!!.getStringExtra("messageId")
         Log.d("----->", "async->" + messageId + "-" + status + "-sucker" + deviceId)
 
         doAsync {
-            var res = khttp.post(
-                url = statusUrl,
-                data = mapOf(
-                    "deviceId" to deviceId,
-                    "messageId" to messageId,
-                    "status" to status,
-                    "action" to "STATUS_UPDATE"
+            lateinit var res: Response
+            try {
+                var res = khttp.post(
+                    url = statusUrl,
+                    data = mapOf(
+                        "deviceId" to deviceId,
+                        "messageId" to messageId,
+                        "status" to status,
+                        "action" to "STATUS_UPDATE"
+                    )
                 )
-            )
-            Log.d("----->", res.text)
+            } catch (e: java.net.ConnectException) {
+                Log.d("-->", "Cannot connect to URL")
+            } finally {
+                Log.d("----->", res.text)
+            }
+
+
         }
     }
 }
