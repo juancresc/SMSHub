@@ -38,7 +38,7 @@ class SMSSendIntent : BroadcastReceiver() {
             lateinit var res: Response
             try {
                 Log.d("-->", "Post status to " + statusUrl)
-                var res = khttp.post(
+                res = khttp.post(
                     url = statusUrl,
                     data = mapOf(
                         "deviceId" to deviceId,
@@ -47,10 +47,9 @@ class SMSSendIntent : BroadcastReceiver() {
                         "action" to "STATUS_UPDATE"
                     )
                 )
+                Log.d("----->", res.text)
             } catch (e: java.net.ConnectException) {
                 Log.d("-->", "Cannot connect to URL")
-            } finally {
-                Log.d("----->", res.text)
             }
 
 

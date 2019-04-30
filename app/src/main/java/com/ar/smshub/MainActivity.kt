@@ -1,6 +1,7 @@
 package com.ar.smshub
 
 import android.Manifest
+import android.app.PendingIntent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -17,6 +18,7 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.telephony.SmsManager
 import android.util.Log
 
 
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     var request_code = 0
     var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
     val MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10
-    val SENT_SMS_FLAG = "SENT_SMS"
+    val SENT_SMS_FLAG = "SMS_SENT"
     val RECEIVED_SMS_FLAG = "SMS_RECEIVED"
     val DELIVER_SMS_FLAG = "DELIVER_SMS"
 
@@ -53,10 +55,23 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(broadcastReceiver, IntentFilter(RECEIVED_SMS_FLAG))
         registerReceiver(sendIntent, IntentFilter(SENT_SMS_FLAG))
         registerReceiver(deliverIntent, IntentFilter(DELIVER_SMS_FLAG))
+
+    }
+
+    override fun onStop() {
+        try {
+            unregisterReceiver(sendIntent)
+            unregisterReceiver(deliverIntent)
+            unregisterReceiver(broadcastReceiver)
+        } catch (e: IllegalArgumentException) {
+            Log.d("-->", "No receivers")
+        }
+        super.onStop()
+
     }
 
 
-    fun getRequestCode(): Int {
+    fun nextRequestCode(): Int {
         return ++this.request_code
     }
 
@@ -72,7 +87,12 @@ class MainActivity : AppCompatActivity() {
 
 
     fun logMain(message: String, newline: Boolean = true) {
-        val mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
+        val mainFragment: MainFragment
+        try {
+            mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
+        } catch (e: kotlin.TypeCastException) {
+            return
+        }
         if (newline) {
             mainFragment.textMainLog.setText(mainFragment.textMainLog.text.toString() + "\n" + message)
         } else {
@@ -117,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             val seconds = settingsManager.interval * 60
             val interval: Long
             if (BuildConfig.DEBUG) {
-                interval = (seconds * 100).toLong()
+                interval = (seconds * 400).toLong()
             } else {
                 interval = (seconds * 1000).toLong()
             }
