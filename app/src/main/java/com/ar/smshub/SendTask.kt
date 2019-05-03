@@ -44,7 +44,7 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
                 mainActivity.runOnUiThread(Runnable {
                     mainActivity.logMain("Error parsing response from server: " + apiResponse.text)
                 })
-                Log.d("error", "Error while parsing SMS")
+                Log.d("error", "Error while parsing SMS" + apiResponse.text)
             }
         } finally {
             // optional finally block

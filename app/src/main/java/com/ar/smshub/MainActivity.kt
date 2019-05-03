@@ -52,20 +52,24 @@ class MainActivity : AppCompatActivity() {
         requestSMSReadPermission()
 
         // Inside OnCreate Method
+        try {
         registerReceiver(broadcastReceiver, IntentFilter(RECEIVED_SMS_FLAG))
         registerReceiver(sendIntent, IntentFilter(SENT_SMS_FLAG))
         registerReceiver(deliverIntent, IntentFilter(DELIVER_SMS_FLAG))
-
+        } catch (e: IllegalArgumentException) {
+            Log.d("-->", "Already subscribed")
+        }
     }
 
     override fun onStop() {
+        /*
         try {
             unregisterReceiver(sendIntent)
             unregisterReceiver(deliverIntent)
             unregisterReceiver(broadcastReceiver)
         } catch (e: IllegalArgumentException) {
             Log.d("-->", "No receivers")
-        }
+        }*/
         super.onStop()
 
     }
