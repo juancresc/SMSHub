@@ -16,6 +16,7 @@ There are other SMS gateways projects but as far as I could check when this proj
 
 ## how?
 
+You can download a compiled .apk file from the beta release [here](https://github.com/juancrescente/SMSHub/releases/download/0.1/app-release.apk)
 
 ### settings
 
