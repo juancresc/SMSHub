@@ -1,5 +1,9 @@
 # SMSHub
 
+## Update
+
+I'n not currently giving support or updating this app. However I'm using it in a production environment with no issues
+
 ## what?
 
 SMSHub is an SMS Gateway application for Android phones (Android Studio project developed in Kotlin) you can use to add SMS functionality to your software.
