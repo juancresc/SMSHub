@@ -22,6 +22,9 @@ There are other SMS gateways projects but as far as I could check when this proj
 
 You can download a compiled .apk file from the beta release [here](https://github.com/juancrescente/SMSHub/releases/download/0.1/app-release.apk)
 
+## other language server?
+php Server: https://github.com/dmd2222/SMSHub-PHP-Server
+
 ### settings
 
 you can customize the next settings directly in the application
