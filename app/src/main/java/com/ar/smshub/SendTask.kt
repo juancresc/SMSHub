@@ -14,8 +14,17 @@ class SMS(val message: String, val number: String, val messageId: String)
 class SendTask constructor(_settings: SettingsManager, _context: Context) : TimerTask() {
     var settings = _settings
     var mainActivity: MainActivity = _context as MainActivity
-
     override fun run() {
+
+        try {
+            val sync = SyncIncomingSMS(settings, mainActivity)
+            sync.run()
+        } catch (e: Exception) {
+            mainActivity.runOnUiThread(Runnable {
+                mainActivity.logMain("[エラー] シンクできませんでした: ${e.localizedMessage}", true)
+            })
+        }
+
         lateinit var apiResponse : Response
         try {
             apiResponse = khttp.post(
