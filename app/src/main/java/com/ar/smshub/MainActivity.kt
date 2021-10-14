@@ -24,8 +24,7 @@ import android.util.Log
 
 class MainActivity : AppCompatActivity() {
     var request_code = 0
-    var MY_PERMISSIONS_REQUEST_SEND_SMS = 1
-    val MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10
+    var MY_PERMISSIONS_REQUEST_SMS_ALL = 1
     val SENT_SMS_FLAG = "SMS_SENT"
     val RECEIVED_SMS_FLAG = "SMS_RECEIVED"
     val DELIVER_SMS_FLAG = "DELIVER_SMS"
@@ -48,8 +47,7 @@ class MainActivity : AppCompatActivity() {
         fragmentManager.executePendingTransactions()
         //initialize timer for the first time
         updateTimer()
-        requestSMSSendPermission()
-        requestSMSReadPermission()
+        requestSMSPermission()
 
         // Inside OnCreate Method
         try {
@@ -85,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             val b = intent.extras
             val number = b!!.getString("number")
             val message = b!!.getString("message")
-            logMain("Message received and posted from: " + number + " - text: " + message)
+            logMain("Message received and posted from: $number")
         }
     }
 
@@ -152,91 +150,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun requestSMSSendPermission() {
-
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.SEND_SMS
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.SEND_SMS
-                )
-            ) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.SEND_SMS),
-                    MY_PERMISSIONS_REQUEST_SEND_SMS
-                )
-
-            }
+    private fun requestSMSPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+            Log.d("Luigi", "Permission has been granted!")
         } else {
-            // Permission has already been granted
+            Log.d("Luigi", "No permission")
         }
-    }
 
-    /**
-     * check SMS read permission
-     */
-    fun isSmsPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECEIVE_SMS
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    /**
-     * Request runtime SMS permission
-     */
-    private fun requestSMSReadPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
-            // You may display a non-blocking explanation here, read more in the documentation:
-            // https://developer.android.com/training/permissions/requesting.html
-        }
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.RECEIVE_SMS),
-            MY_PERMISSIONS_REQUEST_SMS_RECEIVE
+            arrayOf(Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS, Manifest.permission.RECEIVE_SMS),
+            MY_PERMISSIONS_REQUEST_SMS_ALL
         )
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>, grantResults: IntArray
     ) {
-        when (requestCode) {
-            MY_PERMISSIONS_REQUEST_SEND_SMS -> {
-                // If request is cancelled, the result arrays are empty.
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return
-            }
-
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
-            else -> {
-                // Ignore all other requests.
-            }
+        if(grantResults.isNotEmpty()) {
+            val str = if (grantResults[0] == PackageManager.PERMISSION_GRANTED) "GRANTED" else "DENIED"
+            Log.d("SMSHub(PermResult)", "Code: $requestCode, permission $str")
+        } else {
+            Log.d("SMSHub(PermResult)", "Code: $requestCode grantResults is empty")
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
