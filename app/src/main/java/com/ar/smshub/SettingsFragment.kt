@@ -59,9 +59,12 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val btnSave: Button = view.findViewById(R.id.btnSave)
+        val btnLastSyncNow: Button = view.findViewById(R.id.btnLastSyncNow)
         val txtSendURL: EditText = view.findViewById(R.id.textSendURL)
         val txtStatusURL: EditText = view.findViewById(R.id.textStatusURL)
-        val txtReceiveURL: EditText = view.findViewById(R.id.textReceiveURL)
+        val txtSyncURL: EditText = view.findViewById(R.id.textSyncURL)
+        val txtMaxSyncCount: EditText = view.findViewById(R.id.textMaxSyncCount)
+        val txtSyncedAt: EditText = view.findViewById(R.id.textLastSyncTimestamp)
         val txtInterval: EditText = view.findViewById(R.id.textInterval)
         val txtDeviceId: EditText = view.findViewById(R.id.textDeviceId)
         val switchIsEnabled: Switch = view.findViewById(R.id.switchIsEnabled)
@@ -69,9 +72,16 @@ class SettingsFragment : Fragment() {
         txtInterval.setText(settingsManager.interval.toString())
         switchIsEnabled.isChecked = settingsManager.isSendEnabled
         txtSendURL.setText(settingsManager.sendURL)
-        txtReceiveURL.setText(settingsManager.receiveURL)
+        txtSyncURL.setText(settingsManager.syncURL)
+        txtMaxSyncCount.setText(settingsManager.syncMaxCount.toString())
+        txtSyncedAt.setText(settingsManager.lastSyncTimestamp.toString())
         txtStatusURL.setText(settingsManager.statusURL)
         txtDeviceId.setText(settingsManager.deviceId)
+
+        // last synced at -> [Now] button
+        btnLastSyncNow.setOnClickListener {
+            txtSyncedAt.setText((System.currentTimeMillis() / 1000).toInt().toString())
+        }
 
         //save
         btnSave.setOnClickListener {
@@ -79,9 +89,12 @@ class SettingsFragment : Fragment() {
                 switchIsEnabled.isChecked,
                 txtInterval.text.toString().toInt(),
                 txtSendURL.text.toString(),
-                txtReceiveURL.text.toString(),
+                "", // textReceiveURL
                 txtStatusURL.text.toString(),
-                txtDeviceId.text.toString()
+                txtSyncURL.text.toString(),
+                txtDeviceId.text.toString(),
+                txtSyncedAt.text.toString().toInt(),
+                txtMaxSyncCount.text.toString().toInt()
             )
             val mainFragment = fragmentManager.findFragmentByTag("MAIN") as MainFragment
             val transaction = fragmentManager.beginTransaction()
@@ -101,7 +114,9 @@ class SettingsFragment : Fragment() {
                     txtSendURL.text.toString() == "" ||
                     txtDeviceId.text.toString() == "" ||
                     txtStatusURL.text.toString() == "" ||
-                    txtReceiveURL.text.toString() == ""
+                    txtSyncURL.text.toString() == "" ||
+                    txtMaxSyncCount.text.toString() == "" ||
+                    txtSyncedAt.text.toString() == ""
                 ) {
                     switchIsEnabled.isChecked = false
                     Toast.makeText(activity, "Please complete all fields", Toast.LENGTH_LONG).show()
@@ -116,9 +131,12 @@ class SettingsFragment : Fragment() {
                     switchIsEnabled.isChecked,
                     txtInterval.text.toString().toInt(),
                     txtSendURL.text.toString(),
-                    txtReceiveURL.text.toString(),
+                    "", // txtReceiveURL
                     txtStatusURL.text.toString(),
-                    txtDeviceId.text.toString()
+                    txtSyncURL.text.toString(),
+                    txtDeviceId.text.toString(),
+                    txtSyncedAt.text.toString().toInt(),
+                    txtMaxSyncCount.text.toString().toInt()
                 )
             }
             mainActivity.updateTimer()

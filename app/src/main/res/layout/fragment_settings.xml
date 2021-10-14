@@ -9,7 +9,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        <Switch android:text="Enable SMS sending"
+        <Switch android:text="Enable"
                 android:textSize="20sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -45,48 +45,98 @@
                 />
     </LinearLayout>
 
-
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.17"
-                android:textSize="15sp"
-                android:text="Receive URL"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.17"
+            android:textSize="15sp"
+            android:text="Status URL"/>
 
         <EditText
-                android:id="@+id/textReceiveURL"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.75"
-                android:ems="10" android:singleLine="true" android:selectAllOnFocus="true" android:inputType="textUri"
-        />
+            android:id="@+id/textStatusURL"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:ems="10" android:singleLine="true" android:selectAllOnFocus="true" android:inputType="textUri"
+            />
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.17"
-                android:textSize="15sp"
-                android:text="Status URL"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.17"
+            android:textSize="15sp"
+            android:text="Sync URL"/>
 
         <EditText
-                android:id="@+id/textStatusURL"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.75"
-                android:ems="10" android:singleLine="true" android:selectAllOnFocus="true" android:inputType="textUri"
-        />
+            android:id="@+id/textSyncURL"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:ems="10" android:singleLine="true" android:selectAllOnFocus="true" android:inputType="textUri"
+            />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:textSize="15sp"
+            android:text="Sync Max Count"/>
+
+        <EditText
+            android:id="@+id/textMaxSyncCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:ems="10" android:inputType="number" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:textSize="15sp"
+            android:text="last sync (UNIX)"/>
+
+        <EditText
+            android:id="@+id/textLastSyncTimestamp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:ems="10" android:inputType="number" />
+
+        <Button
+            android:id="@+id/btnLastSyncNow"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:text="Now"/>
+
+    </LinearLayout>
+
+
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
